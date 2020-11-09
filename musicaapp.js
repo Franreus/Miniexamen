@@ -2,10 +2,10 @@ const canciones = require('./canciones.js');
 const chalk = require('chalk');
 
 console.log(chalk.black.bgWhite("--- AÑADIR CANCIONES --------------------------------------- "));
-canciones.añadirCancion({ nombre: 'the rolling stones', artista: 'frank sinatra', anyo: '0000' });
-canciones.añadirCancion({ nombre: 'ei', artista: 'Hola', anyo: '2000' });
-canciones.añadirCancion({ nombre: 'olaola', artista: 'Michel Jakson', anyo: '2333' });
-canciones.añadirCancion({ nombre: 'jdjjd', artista: 'eieiei', anyo: '8383' });
+canciones.añadirCancion({ nombre: 'start me up', artista: 'the rolling stones', anyo: '1970' });
+canciones.añadirCancion({ nombre: 'New York, New York', artista: 'Frank Sinatra', anyo: '1960' });
+canciones.añadirCancion({ nombre: 'My Way', artista: 'Frank Sinatra', anyo: '1971' });
+canciones.añadirCancion({ nombre: 'Killing me softly', artista: 'Frank Sinatra', anyo: '1972' });
 console.log(chalk.black.bgWhite("--- LEER CANCIONES --------------------------------------- "));
 canciones.leerCancion(`Dope`);
 console.log(chalk.black.bgWhite("--- EDITAR ARTISTAS --------------------------------------- "));
