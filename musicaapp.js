@@ -1,4 +1,4 @@
-const canciones = require('./canciones.js');
+const canciones = require('./cancion.js');
 const chalk = require('chalk');
 
 console.log(chalk.black.bgWhite("--- AÑADIR CANCIONES --------------------------------------- "));
