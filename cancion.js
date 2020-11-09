@@ -1,10 +1,10 @@
+/*
+    APLICACIÓN EXAMEN
+    
+*/
 const fs = require('fs')
-const chalk = require('chalk')
 
-/* console.log('hola')
-console.log(chalk.red.inverse('hola')) */
-
-const leerCancion = (fichero)=>{
+const leerCanciones = (fichero)=>{
     try {
         const buffer = fs.readFileSync(fichero)
         const datosString = buffer.toString()
@@ -15,70 +15,84 @@ const leerCancion = (fichero)=>{
     }
 }
 
-const escribirCancion=(fichero, cancion)=>{
-    const textoJSON = JSON.stringify(cancion)
+const escribirCanciones=(fichero, datos)=>{
+    const textoJSON = JSON.stringify(datos)
     fs.writeFileSync(fichero, textoJSON)
 }
 
-const crearCancion =  (titulo, artista) => {
+const añadirCancion = (cancion) => {
+    const canciones = leerCanciones('canciones.json')
 
-    const cancion = leerCancion('notas.json')
-
-    // buscar si existe la cancion
-    const indice = cancion.findIndex(
-         (cancion) => cancion.titulo == titulo
+    // buscar si existe la nota
+    const indice = canciones.findIndex(
+         (_cancion) => _cancion.nombre == cancion.nombre
     )
     if (indice === -1) {
-        console.log(chalk.green.inverse('cancion creada'))
-        notas.push({ titulo: titulo, artista }) // cuerpo:cuerpo
-        escribirCancion('cancion.json', cancion)
+        console.log(`Se ha añadido la cancion: ${cancion.nombre}`)
+        canciones.push({nombre: cancion.nombre, artista: cancion.artista, anyo: cancion.anyo}) // cuerpo:cuerpo
+        escribirCanciones('canciones.json', canciones)
     } else {
-        console.log(chalk.red.inverse('Cancion ya existente'))
+        console.log(`La canción ${cancion.nombre} ya existe en la lista de canciones.`)
+        //console.log(chalk.red.inverse('Nota ya existente'))
     }
 }
 
-const borrarCancion = (titulo)=> {
+const leerCancion = (titulo) => {
+    const canciones = leerCanciones('canciones.json')
 
-    const cancion = leerCancion('cancion.json')
+    const cancionEncontrada = canciones.find((cancion) => {
+        return cancion.nombre.toLowerCase() === titulo.toLowerCase()
+    })
 
-    const indice = cancion.findIndex( (cancion)=> cancion.titulo === titulo)
+    if(cancionEncontrada){
+        //console.log(chalk.green.inverse('Nota encontrada'))
+        console.log(cancionEncontrada);
+    } else {
+        console.log(`No se ha encontrado la canción: ${titulo}`);
+        //console.log(chalk.red.inverse('No se encuentra la nota'))
+    }
+}
+
+const editarArtista = (titulo, nuevoArtista) => {
+    const canciones = leerCanciones('canciones.json')
+
+    const indice = canciones.findIndex((cancion)=> cancion.nombre.toLowerCase() === titulo.toLowerCase())
     if (indice === -1) {
-        console.log('Cancion no encontrada')
+        console.log(`No se ha encontrado la canción: ${titulo}`);
     } else {
-        console.log('Cancion borrada')
-        notas.splice(indice, 1)
-        escribirCancion('cancion.json', notas) // notas tiene un elemento menos
+        const _cancion = canciones.splice(indice, 1)
+        canciones.push({nombre: `${_cancion[0].nombre}`, artista: `${nuevoArtista}`, anyo: `${_cancion[0].anyo}`});
+        console.log(`Editado autor de la cancion ${_cancion[0].nombre} por ${nuevoArtista}`);
+        escribirCanciones('canciones.json', canciones)
     }
 }
 
-const borrarCancion2 = (titulo) => {
-    const cancion = leerCancion('cancion.json')
+const borrarCancion = (titulo) => {
+    const canciones = leerCanciones('canciones.json')
 
-    const cancionFiltradas = cancion.filter( (cancion)=> cancion.titulo !== titulo)
-    if (cancion.length > cancionFiltradas.length) {
-        console.log(chalk.green.inverse('cancion borrada'))
-        escribirCancion('cancion.json', cancionFiltradas)
+    const indice = canciones.findIndex((cancion)=> cancion.nombre.toLowerCase() === titulo.toLowerCase())
+    if (indice === -1) {
+        console.log(`No se ha encontrado la canción: ${titulo}`);
     } else {
-        console.log(chalk.red.inverse('Cancion no se puede borrar porque no existe'))
+        const _cancion = canciones.splice(indice, 1)
+        console.log(`Borrada la canción ${_cancion[0].nombre}`);
+        escribirCanciones('canciones.json', canciones)
     }
 }
 
-const ordenarCancion = (opcion) => {
-    const cancion = leerCancion('cancion.json')
-    /* opcion: titulo, artista */
-    if (opcion === 'titulo') {
-        cancion.sort( (cancionA, cancionB) => {
+const listarCanciones = () => {
+    const canciones = leerCanciones('canciones.json')
+    canciones.forEach((cancion, index) => {
+        console.log(`${index+1}. ${cancion.nombre} ( ${cancion.anyo} ) de ${cancion.artista}`);
+    });
+    //console.log(JSON.stringify(canciones));
+}
+
+const ordenarCanciones = (tipo) => {
+    const canciones = leerCanciones('canciones.json')
+    if (tipo === 'artista') {
+        canciones.sort( (cancionA, cancionB) => {
             debugger
-            if (cancionA.titulo.toLowerCase() < cancionB.titulo.toLowerCase()) {
-                return -1
-            } else if (cancionA.titulo.toLowerCase() > cancionB.titulo.toLowerCase()) {
-                return 1
-            } else {
-                return 0
-            }
-        })
-    } else {
-        cancion.sort( (cancionA, cancionB) => {
             if (cancionA.artista.toLowerCase() < cancionB.artista.toLowerCase()) {
                 return -1
             } else if (cancionA.artista.toLowerCase() > cancionB.artista.toLowerCase()) {
@@ -87,42 +101,26 @@ const ordenarCancion = (opcion) => {
                 return 0
             }
         })
-    }
-    escribirCancion('cancion.json', cancion)
-}
-
-const ordenarCancion2 = (opcion) => {
-    const cancion = leerCancion('cancion.json')
-    cancion.sort( (cancionA, cancionB) => {
-        if (cancionA[opcion].toLowerCase() < cancionB[opcion].toLowerCase()) {
-            return -1
-        } else if (cancionA[opcion].toLowerCase() > cancionB[opcion].toLowerCase()) {
-            return 1
-        } else {
-            return 0
-        }
-    })
-    escribirCancion('cancion.json', cancion)
-}
-
-const buscarCancionEnNotas = (texto) => {
-    const cancion = leerCancion('cancion.json')
-
-    const cancionEncontrada = cancion.find( (cancion) => {
-        return cancion.titulo.toLowerCase().includes(texto.toLowerCase()) || cancion.cuerpo.toLowerCase().includes(texto.toLowerCase())
-    })
-
-    if(cancionEncontrada){
-        console.log(chalk.green.inverse('Cancion encontrada'))
-        console.log(cancionEncontrada)
     } else {
-        console.log(chalk.red.inverse('No se encuentra la cancion'))
+        canciones.sort( (cancionA, cancionB) => {
+            if (cancionA.anyo.toLowerCase() < cancionB.anyo.toLowerCase()) {
+                return 1
+            } else if (cancionA.anyo.toLowerCase() > cancionB.anyo.toLowerCase()) {
+                return -1
+            } else {
+                return 0
+            }
+        })
     }
+    //escribirCanciones('notas.json', canciones)
+    console.log(JSON.stringify(canciones));
 }
 
 module.exports = {
-    crear: crearCancion,
-    borrar: borrarCancion2,
-    ordenarCancion,
-    buscarCancionEnNotas
+    añadirCancion,
+    leerCancion,
+    editarArtista,
+    borrarCancion,
+    listarCanciones,
+    ordenarCanciones
 }

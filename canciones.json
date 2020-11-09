@@ -1,0 +1,38 @@
+[
+    {
+        "titulo": "start me up",
+        "artista": "the rolling stones",
+        "anyo": "1970"
+
+    },
+    {
+        "titulo": "New York, New York",
+        "artista": "Frank Sinatra",
+        "anyo": "1960"
+    },
+    {
+        "titulo": "My Way",
+        "artista": "Frank Sinatra",
+        "anyo": "1971"
+    },
+    {
+        "titulo": "Killing me softly",
+        "artista": "Frank Sinatra",
+        "anyo": "1972"
+    },
+    {
+        "titulo": "moonlight serenade",
+        "artista": "glenn miller",
+        "anyo": "1956"
+    },
+    {
+        "titulo": "michael jackson",
+        "artista": "billie jean",
+        "anyo": "1980"
+    },
+    {
+        "titulo": "michael jackson",
+        "artista": "Rock With You",
+        "anyo": "1990"
+    }
+]
